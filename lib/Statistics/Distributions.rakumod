@@ -93,11 +93,11 @@ multi random-real((Numeric $min, Numeric $max)) {
 }
 
 multi random-real((Numeric $min, Numeric $max), UInt $size) {
-    return RandomVariate(Statistics::Distributions::Uniform.new(:$min, :$max), $size);
+    return RandomVariate(UniformDistribution.new(:$min, :$max), $size);
 }
 
 multi random-real((Numeric $min, Numeric $max), @size) {
-    return RandomVariate(Statistics::Distributions::Uniform.new(:$min, :$max), @size);
+    return RandomVariate(UniformDistribution.new(:$min, :$max), @size);
 }
 
 multi random-real(Numeric :$min = 0, Numeric :$max = 1) {
