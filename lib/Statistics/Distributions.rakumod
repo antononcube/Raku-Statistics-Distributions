@@ -66,44 +66,44 @@ multi RandomVariate($dist, UInt $size --> List) {
 
 #===========================================================
 #| Gives a pseudorandom variate from the distribution specification.
-our proto random-variate(|) is export {*}
+our proto sub random-variate(|) is export {*}
 
-multi random-variate(**@args, *%args) {
+multi sub random-variate(**@args, *%args) {
     RandomVariate(|@args, |%args)
 }
 
 #===========================================================
 #| Gives a pseudorandom variate from the uniform distribution with specified range.
-our proto random-real(|) is export {*}
+our proto sub random-real(|) is export {*}
 
-multi random-real(Numeric $max = 1) {
+multi sub random-real(Numeric $max = 1) {
     return random-real((0, $max), 1)[0]
 }
 
-multi random-real(Numeric $max, UInt $size) {
+multi sub random-real(Numeric $max, UInt $size) {
     return random-real((0, $max), $size)
 }
 
-multi random-real(Numeric $max, @size) {
+multi sub random-real(Numeric $max, @size) {
     return random-real((0, $max), @size)
 }
 
-multi random-real((Numeric $min, Numeric $max)) {
+multi sub random-real((Numeric $min, Numeric $max)) {
     return random-real(($min, $max), 1)[0];
 }
 
-multi random-real((Numeric $min, Numeric $max), UInt $size) {
+multi sub random-real((Numeric $min, Numeric $max), UInt $size) {
     return RandomVariate(UniformDistribution.new(:$min, :$max), $size);
 }
 
-multi random-real((Numeric $min, Numeric $max), @size) {
+multi sub random-real((Numeric $min, Numeric $max), @size) {
     return RandomVariate(UniformDistribution.new(:$min, :$max), @size);
 }
 
-multi random-real(Numeric :$min = 0, Numeric :$max = 1) {
+multi sub random-real(Numeric :$min = 0, Numeric :$max = 1) {
     return random-real(($min, $max));
 }
 
-multi random-real(Numeric :$min = 0, Numeric :$max = 1, :$size = 1) {
+multi sub random-real(Numeric :$min = 0, Numeric :$max = 1, :$size = 1) {
     return random-real(($min, $max), $size);
 }
