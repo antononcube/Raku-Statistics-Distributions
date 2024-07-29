@@ -1,0 +1,31 @@
+use Test;
+
+use lib <. lib>;
+
+use Statistics::Distributions;
+
+plan *;
+
+## 1
+isa-ok random-real, Numeric:D,
+        'No arguments';
+
+## 2
+isa-ok random-real(10), Numeric:D,
+        'Single argument';
+
+## 3
+isa-ok random-real(10), Numeric:D,
+        'Single argument';
+
+## 4
+isa-ok random-real([12, 100]), Numeric:D,
+        'Range spec';
+
+## 5
+is random-real([12, 100], 10).all ~~ Numeric,
+        True,
+        'Range spec with count';
+
+
+done-testing;
