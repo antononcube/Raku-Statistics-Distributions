@@ -80,4 +80,17 @@ is random-variate(BetaDistribution.new(4, 4), 100).all ~~ Numeric:D, True;
 ## 15
 is random-variate(MixtureDistribution.new([2, 5], [NormalDistribution.new(3, 4), NormalDistribution.new(6, 5)]), 100).all ~~ Numeric:D, True;
 
+## 16
+subtest {
+    ok random-variate(ProductDistribution.new([NormalDistribution.new(3, 4), NormalDistribution.new(6, 5)]), 100);
+    my @points = random-variate(ProductDistribution.new([NormalDistribution.new(3, 4), NormalDistribution.new(6, 5)]), 100);
+    is @points.all ~~ Positional:D, True;
+
+    is ([==] |@points».elems), True;
+}
+
+# 17
+isa-ok random-variate(DiscreteUniformDistribution.new(:min(10), :max(20))), Numeric,
+        'No size argument gives a number for DiscreteUniformDistribution';
+
 done-testing;
