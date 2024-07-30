@@ -171,3 +171,18 @@ sub mixture-dist(@weights, @dists, UInt:D :$size = 1) is export {
 
     return @picks.map({ @dists[$_].generate.head }).List;
 }
+
+
+#------------------------------------------------------------
+sub transpose(@matrix) {
+    my @res;
+    for ^@matrix.elems -> $i {
+        for ^@matrix[0].elems -> $j {
+            @res[$j][$i] = @matrix[$i][$j]
+        }
+    }
+    return @res;
+}
+sub product-dist(@dists, UInt:D :$size = 1) is export {
+    return @dists.map({ $_.generate(:$size) }).&transpose.List;
+}
