@@ -6,6 +6,8 @@ use Statistics::Distributions::Utilities;
 
 #| Generic Distribution class
 class Generic is export {
+    has UInt:D $.dimension = 1;
+    has Bool:D $.continuous = True;
     multi method generate(UInt:D $size = 1) {
         self.generate(:$size)
     }
@@ -42,6 +44,10 @@ class Binomial is Generic is export {
     #= Number of trials
     has Numeric:D $.p = 0.5;
     #= Success probability p
+
+    submethod BUILD(Numeric:D :$!n!, Numeric:D :$!p!) {
+        self.continuos = False;
+    }
     multi method new($n, $p) { self.bless(:$n, :$p) }
     multi method generate(UInt:D :$size) {
         binomial-dist($!n, $!p, :$size).List
@@ -111,6 +117,12 @@ class Mixture is Generic is export {
     }
 
     multi method generate(UInt:D :$size) {
+        die "The distributions must have the same dimensions."
+        unless @!distributions.map(*.dimension).reduce({ $^a == $^b });
+
+        die "The distributions must be all continous or all disctete."
+        unless @!distributions.map(*.continuous).reduce({ $^a == $^b });
+
         mixture-dist(@!weights, @!distributions, :$size)
     }
 }
