@@ -3,6 +3,9 @@
 
 Raku package for statistical distributions and related random variates generations.
 
+The distributions and random variate functions of the generations of "Statistics::Distributions"
+are automatically exported when ["Data::Generators"](https://raku.land/zef:antononcube/Data::Generators), [AAp1] is loaded.
+
 -----
 
 ## Installation
@@ -92,3 +95,16 @@ Here is an example of 2D array generation:
 ```perl6
 say random-variate(NormalDistribution.new, [3,4]);
 ```
+
+**Remark:** The Markdown document 
+["Random-variate-generation-examples.md"](https://github.com/antononcube/Raku-Statistics-Distributions/blob/main/docs/Random-variate-generation-examples.md),
+is a guide to generating random variates with the distributions of this package.
+
+---------
+
+## References
+
+[AAp1] Anton Antonov
+[Data::Generators Raku package](https://github.com/antononcube/Raku-Data-Generators),
+(2021-2024),
+[GitHub/antononcube](https://github.com/antononcube).
