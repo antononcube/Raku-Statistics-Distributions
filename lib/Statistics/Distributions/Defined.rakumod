@@ -66,16 +66,16 @@ class Binormal is Generic is export {
     has Numeric:D $.sigma2 = 1;
     has Numeric:D $.rho = 0;
 
-    multi method new(($mu1, $mu2), ($sigma1, $sigma2), $rho) {
+    multi method new((Numeric:D $mu1, Numeric:D $mu2), (Numeric:D $sigma1, Numeric:D $sigma2), Numeric:D $rho) {
         self.bless(:$mu1, :$mu2, :$sigma1, :$sigma2, :$rho)
     }
 
-    multi method new(($sigma1, $sigma2), $rho) {
+    multi method new((Numeric:D $sigma1, Numeric:D $sigma2), Numeric:D $rho) {
         my ($mu1, $mu2) = (0, 0);
         self.bless(:$mu1, :$mu2, :$sigma1, :$sigma2, :$rho)
     }
 
-    multi method new($rho) {
+    multi method new(Numeric:D $rho) {
         my ($mu1, $mu2) = (0, 0);
         my ($sigma1, $sigma2) = (1, 1);
         self.bless(:$mu1, :$mu2, :$sigma1, :$sigma2, :$rho)
