@@ -9,6 +9,7 @@ use Statistics::Distributions::Utilities;
 constant \BetaDistribution is export := Statistics::Distributions::Defined::Beta;
 constant \BernoulliDistribution is export := Statistics::Distributions::Defined::Bernoulli;
 constant \BinomialDistribution is export := Statistics::Distributions::Defined::Binomial;
+constant \BinormalDistribution is export := Statistics::Distributions::Defined::Binormal;
 constant \ExponentialDistribution is export := Statistics::Distributions::Defined::Exponential;
 constant \GammaDistribution is export := Statistics::Distributions::Defined::Gamma;
 constant \NormalDistribution is export := Statistics::Distributions::Defined::Normal;
@@ -44,6 +45,9 @@ multi RandomVariate($dist, UInt $size --> List) {
         }
         when BinomialDistribution {
             binomial-dist($dist.n, $dist.p, :$size).List
+        }
+        when BinormalDistribution {
+            (binormal-dist([$dist.mu1, $dist.mu2], [$dist.sigma1, $dist.sigma2], $dist.rho) xx $size).List
         }
         when ExponentialDistribution {
             exponential-dist($dist.lambda, :$size).List

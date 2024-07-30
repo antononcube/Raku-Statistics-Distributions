@@ -137,3 +137,16 @@ sub beta-dist(Numeric:D $a, Numeric $b) is export {
             ;
     return $x / ($x + $y);
 }
+
+#------------------------------------------------------------
+sub binormal-dist(@mu, @sigma, $rho) is export {
+    my ($mu1, $mu2) = @mu;
+    my ($sigma1, $sigma2) = @sigma;
+
+    my ($z1, $z2) = normal-dist(0,1) xx 2;
+
+    my $x1 = $mu1 + $sigma1 * $z1;
+    my $x2 = $mu2 + $sigma2 * ($rho * $z1 + sqrt(1 - $rho ** 2) * $z2);
+
+    return ($x1, $x2);
+}
