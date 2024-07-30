@@ -90,7 +90,29 @@ subtest {
 }
 
 # 17
-isa-ok random-variate(DiscreteUniformDistribution.new(:min(10), :max(20))), Numeric,
-        'No size argument gives a number for DiscreteUniformDistribution';
+subtest {
+    ok random-variate(DiscreteUniformDistribution.new(:min(10), :max(20)));
+    isa-ok random-variate(DiscreteUniformDistribution.new(:min(10), :max(20))), Numeric:D,
+            'No size argument gives a number for DiscreteUniformDistribution';
+    is random-variate(DiscreteUniformDistribution.new(:min(-10), :max(20)), 10).all ~~ Int:D, True,
+            'DiscreteUniformDistribution gives integers';
+}
+
+# 18
+subtest {
+    ok BinormalDistribution.new([10, 4], [4, 2], 0.5), 'three arguments';
+    ok BinormalDistribution.new([1, 1], 0.5), 'two arguments';
+    ok BinormalDistribution.new(0.5), 'one argument';
+
+    is
+            random-variate(BinormalDistribution.new([10, 4], [4, 2], 0.5), 10).all ~~ Positional:D,
+            True,
+            'list of positionals for three arugments';
+
+    is
+            random-variate(BinormalDistribution.new([4, 2], 0.5), 10).all ~~ Positional:D,
+            True,
+            'list of positionals for two arugments';
+}
 
 done-testing;
