@@ -7,7 +7,10 @@ use Statistics::Distributions::Utilities;
 #| Generic Distribution class
 class Generic is export {
     has UInt:D $.dimension = 1;
-    has Bool:D $.continuous = True;
+    # I am not happy with $.continuous and $.derived being rw,
+    # but that is the easiest way to initialize them correctly.
+    has Bool:D $.continuous is rw = True;
+    has Bool:D $.derived is rw = False;
     multi method generate(UInt:D $size = 1) {
         self.generate(:$size)
     }
@@ -84,6 +87,21 @@ class Binormal is Generic is export {
 }
 #= Binormal distribution objects take parameters for the distribution mean and covariance matrix.
 
+#| Discrete Uniform distribution class
+class DiscreteUniform is Generic is export {
+    has Int:D $.min = 0;
+    #= Min boundary of the Uniform distribution
+    has Int:D $.max = 1;
+    #= Max boundary of the Uniform distribution
+
+    submethod TWEAK() { self.continuous = False; }
+    multi method new($min, $max) { self.bless(:$min, :$max) }
+    multi method generate(UInt:D :$size) {
+        ($!min .. $!max).pick($size).List
+    }
+}
+#= Discrete Uniform distribution objects are specified with min and max integer boundaries.
+
 #| Exponential distribution class
 class Exponential is Generic is export {
     has Numeric:D $.lambda = 0.5;
@@ -108,24 +126,36 @@ class Gamma is Generic is export {
 }
 #= Gamma distribution objects are specified shape parameter a and inverse scale parameter b.
 
-#| Uniform distribution class
+#| Mixture distribution class
 class Mixture is Generic is export {
     has @.weights;
     has @.distributions;
+
+    submethod BUILD(:@!weights!, :@!distributions!) {
+        die "Weights and distributions must match in length."
+        unless @!weights.elems == @!distributions.elems;
+
+        die "The distributions must have the same dimension."
+        unless @!distributions.map(*.dimension).reduce({ $^a == $^b });
+
+        die "The distributions must be all continous or all disctete."
+        unless @!distributions.map(*.continuous).reduce({ $^a == $^b });
+    }
+
+    submethod TWEAK() {
+        self.continuous = @!distributions.head.continuous;
+        self.derived = True;
+    }
+
     multi method new(@weights, @distributions) {
         self.bless(:@weights, :@distributions)
     }
 
     multi method generate(UInt:D :$size) {
-        die "The distributions must have the same dimensions."
-        unless @!distributions.map(*.dimension).reduce({ $^a == $^b });
-
-        die "The distributions must be all continous or all disctete."
-        unless @!distributions.map(*.continuous).reduce({ $^a == $^b });
-
         mixture-dist(@!weights, @!distributions, :$size)
     }
 }
+#= Mixture distribution objects are specified distributions and corresponding choice weights.
 
 #| Normal distribution class
 class Normal is Generic is export {
@@ -141,6 +171,30 @@ class Normal is Generic is export {
     }
 }
 #= Normal distribution objects are specified with mean and standard deviation.
+
+#| Product distribution class
+class Product is Generic is export {
+    has @.distributions;
+
+    submethod BUILD(:@!distributions!) {
+        die "Known distributions are expected."
+        unless @!distributions.all ~~ Generic;
+    }
+
+    submethod TWEAK() {
+        self.continuous = [&&] @!distributions.head.continuous;
+        self.derived = True;
+    }
+
+    multi method new(+@distributions) {
+        self.bless(:@distributions)
+    }
+
+    multi method generate(UInt:D :$size) {
+        product-dist(@!distributions, :$size)
+    }
+}
+#= Product Distribution objects are created with lists of distribution objects.
 
 #| Uniform distribution class
 class Uniform is Generic is export {
