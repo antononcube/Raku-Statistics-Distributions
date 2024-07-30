@@ -77,4 +77,7 @@ is random-variate(UniformDistribution.new(3, 5), 100).all ~~ Numeric:D, True;
 ## 14
 is random-variate(BetaDistribution.new(4, 4), 100).all ~~ Numeric:D, True;
 
+## 15
+is random-variate(MixtureDistribution.new([2, 5], [NormalDistribution.new(3, 4), NormalDistribution.new(6, 5)]), 100).all ~~ Numeric:D, True;
+
 done-testing;
