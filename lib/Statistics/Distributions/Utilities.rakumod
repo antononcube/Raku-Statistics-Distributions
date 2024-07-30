@@ -150,3 +150,22 @@ sub binormal-dist(@mu, @sigma, $rho) is export {
 
     return ($x1, $x2);
 }
+
+#------------------------------------------------------------
+sub mixture-dist(@weights, @dists, UInt:D :$size = 1) is export {
+    die "Weights and distributions must match in length."
+    unless @weights.elems == @dists.elems;
+
+    die "Weights must be non-negative numbers."
+    unless (@weights.all ~~ Numeric:D) && ([&&] @weights.map({ $_ ≥ 0 }));
+
+    die "All distributions must have method generate()."
+    unless @dists.map({ 'generate' ∈ $_.^method_names });
+
+    my @cumulative-weights = produce(&[+], @weights.prepend(0));
+    @cumulative-weights = @cumulative-weights >>/>> @cumulative-weights.tail;
+    my @baseSample = rand xx $size;
+    my @picks = find-interval(@baseSample, @cumulative-weights);
+
+    return @picks.map({ @dists[$_].generate.head }).List;
+}

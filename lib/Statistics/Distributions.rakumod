@@ -3,7 +3,6 @@ use v6.d;
 unit module Statistics::Distributions;
 
 use Statistics::Distributions::Defined;
-use Statistics::Distributions::Utilities;
 
 #===========================================================
 constant \BetaDistribution is export := Statistics::Distributions::Defined::Beta;
@@ -12,6 +11,7 @@ constant \BinomialDistribution is export := Statistics::Distributions::Defined::
 constant \BinormalDistribution is export := Statistics::Distributions::Defined::Binormal;
 constant \ExponentialDistribution is export := Statistics::Distributions::Defined::Exponential;
 constant \GammaDistribution is export := Statistics::Distributions::Defined::Gamma;
+constant \MixtureDistribution is export := Statistics::Distributions::Defined::Mixture;
 constant \NormalDistribution is export := Statistics::Distributions::Defined::Normal;
 constant \UniformDistribution is export := Statistics::Distributions::Defined::Uniform;
 
@@ -37,29 +37,8 @@ multi RandomVariate($dist ,
 #------------------------------------------------------------
 multi RandomVariate($dist, UInt $size --> List) {
     given $dist {
-        when BetaDistribution {
-            (beta-dist($_.a, $_.b) xx $size).List
-        }
-        when BernoulliDistribution {
-            (rand xx $size).map({ $_ ≤ $dist.p ?? 1 !! 0 }).List
-        }
-        when BinomialDistribution {
-            binomial-dist($dist.n, $dist.p, :$size).List
-        }
-        when BinormalDistribution {
-            (binormal-dist([$dist.mu1, $dist.mu2], [$dist.sigma1, $dist.sigma2], $dist.rho) xx $size).List
-        }
-        when ExponentialDistribution {
-            exponential-dist($dist.lambda, :$size).List
-        }
-        when GammaDistribution {
-            (gamma-dist($dist.a, $dist.b) xx $size).List
-        }
-        when NormalDistribution {
-            (normal-dist($_.mean, $_.sd) xx $size).List
-        }
-        when UniformDistribution {
-            (($_.min .. $_.max).rand xx $size).List
+        when $dist ~~ Generic {
+            $dist.generate(:$size)
         }
         default {
             die "Unknown random variate class."
