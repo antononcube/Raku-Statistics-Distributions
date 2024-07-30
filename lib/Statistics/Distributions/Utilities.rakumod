@@ -162,6 +162,8 @@ sub mixture-dist(@weights, @dists, UInt:D :$size = 1) is export {
     die "All distributions must have method generate()."
     unless @dists.map({ 'generate' ∈ $_.^method_names });
 
+    # Instead of this ad hoc weighted choice algorithm made from scratch,
+    # the built-in weighted choice via Mix can used
     my @cumulative-weights = produce(&[+], @weights.prepend(0));
     @cumulative-weights = @cumulative-weights >>/>> @cumulative-weights.tail;
     my @baseSample = rand xx $size;
