@@ -9,10 +9,12 @@ constant \BetaDistribution is export := Statistics::Distributions::Defined::Beta
 constant \BernoulliDistribution is export := Statistics::Distributions::Defined::Bernoulli;
 constant \BinomialDistribution is export := Statistics::Distributions::Defined::Binomial;
 constant \BinormalDistribution is export := Statistics::Distributions::Defined::Binormal;
+constant \DiscreteUniformDistribution is export := Statistics::Distributions::Defined::DiscreteUniform;
 constant \ExponentialDistribution is export := Statistics::Distributions::Defined::Exponential;
 constant \GammaDistribution is export := Statistics::Distributions::Defined::Gamma;
 constant \MixtureDistribution is export := Statistics::Distributions::Defined::Mixture;
 constant \NormalDistribution is export := Statistics::Distributions::Defined::Normal;
+constant \ProductDistribution is export := Statistics::Distributions::Defined::Product;
 constant \UniformDistribution is export := Statistics::Distributions::Defined::Uniform;
 
 #============================================================
