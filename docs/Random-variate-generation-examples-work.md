@@ -25,10 +25,15 @@ use Text::Plot;
 
 ```raku
 my $beta = BetaDistribution.new(4, 4);
-my @res = random-variate($beta, 12);
+my @res = random-variate($beta, 200);
 
 records-summary(@res);
 ```
+
+```perl6
+text-histogram(@res, title => 'Beta Distribution')
+```
+
 
 ### Bernoulli Distribution
 
@@ -47,9 +52,13 @@ records-summary(@res);
 
 ```raku
 my $discrete_uniform = DiscreteUniformDistribution.new(:min(10), :max(20));
-my @res = random-variate($discrete_uniform, 12);
+my @res = random-variate($discrete_uniform, 200);
 
 records-summary(@res);
+```
+
+```perl6
+text-list-plot(@res.&tally.kv.rotor(2), title => 'Discrete Uniform Distribution tallies')
 ```
 
 ### Normal Distribution
@@ -57,10 +66,14 @@ records-summary(@res);
 [Normal distribution](https://en.wikipedia.org/wiki/Normal_distribution) is a continuous probability distribution that is defined by two parameters, the mean and the standard deviation. The normal distribution is also known as the Gaussian distribution.
 
 ```raku
-my $normal = NormalDistribution.new(:mean(10), :sd(20));
-my @res = random-variate($normal, 12);
+my $normal = NormalDistribution.new(:mean(10), :sd(2));
+my @res = random-variate($normal, 200);
 
 records-summary(@res);
+```
+
+```perl6
+text-histogram(@res, title => 'Normal Distribution')
 ```
 
 ### Uniform Distribution
@@ -68,12 +81,15 @@ records-summary(@res);
 [Uniform distribution](https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)) is a continuous probability distribution that is defined by two parameters, the minimum and the maximum. The uniform distribution is also known as the rectangular distribution.
 
 ```raku
-my $uniform = UniformDistribution.new(:min(10), :max(20));
-my @res = random-variate($uniform, 12);
+my $uniform = UniformDistribution.new(:min(-10), :max(5));
+my @res = random-variate($uniform, 200);
 
 records-summary(@res);
 ```
 
+```perl6
+text-histogram(@res, title => 'Uniform Distribution')
+```
 
 ----
 
@@ -92,7 +108,7 @@ records-summary(@res, field-names => ['0', '1']);
 ```
 
 ```perl6
-text-list-plot(@res, width => 60, height => 20)
+text-list-plot(@res, width => 60, height => 20, title => 'Binormal Distribution random variates')
 ```
 
 -----
@@ -104,10 +120,14 @@ text-list-plot(@res, width => 60, height => 20)
 [Mixture distribution](https://en.wikipedia.org/wiki/Mixture_distribution) is a probability distribution that is a weighted sum of two or more other probability distributions.
 
 ```raku
-my $mixture = MixtureDistribution.new([2, 5], [NormalDistribution.new(3, 4), NormalDistribution.new(6, 5)]);
-my @res = random-variate($mixture, 12);
+my $mixture = MixtureDistribution.new([2, 5], [NormalDistribution.new(3, 4), NormalDistribution.new(16, 5)]);
+my @res = random-variate($mixture, 300);
 
 records-summary(@res);
+```
+
+```perl6
+text-histogram(@res, title => 'Mixture Distribution', width => 80)
 ```
 
 ### Product Distribution
@@ -122,7 +142,7 @@ records-summary(@res, field-names => ['0', '1']);
 ```
 
 ```perl6
-text-list-plot(@res, width => 60, height => 20)
+text-list-plot(@res, width => 60, height => 20, title => "Product Distribution random variates")
 ```
 
 --------
