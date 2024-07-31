@@ -97,7 +97,7 @@ class DiscreteUniform is Generic is export {
     submethod TWEAK() { self.continuous = False; }
     multi method new($min, $max) { self.bless(:$min, :$max) }
     multi method generate(UInt:D :$size) {
-        ($!min .. $!max).pick($size).List
+        ($!min .. $!max).roll($size).List
     }
 }
 #= Discrete Uniform distribution objects are specified with min and max integer boundaries.
