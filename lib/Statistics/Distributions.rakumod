@@ -9,6 +9,7 @@ constant \BetaDistribution is export := Statistics::Distributions::Defined::Beta
 constant \BernoulliDistribution is export := Statistics::Distributions::Defined::Bernoulli;
 constant \BinomialDistribution is export := Statistics::Distributions::Defined::Binomial;
 constant \BinormalDistribution is export := Statistics::Distributions::Defined::Binormal;
+constant \ChiSquareDistribution is export := Statistics::Distributions::Defined::ChiSquare;
 constant \DiscreteUniformDistribution is export := Statistics::Distributions::Defined::DiscreteUniform;
 constant \ExponentialDistribution is export := Statistics::Distributions::Defined::Exponential;
 constant \GammaDistribution is export := Statistics::Distributions::Defined::Gamma;

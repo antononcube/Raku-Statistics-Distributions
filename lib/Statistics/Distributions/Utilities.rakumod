@@ -172,7 +172,6 @@ sub mixture-dist(@weights, @dists, UInt:D :$size = 1) is export {
     return @picks.map({ @dists[$_].generate.head }).List;
 }
 
-
 #------------------------------------------------------------
 sub transpose(@matrix) {
     my @res;
@@ -185,4 +184,18 @@ sub transpose(@matrix) {
 }
 sub product-dist(@dists, UInt:D :$size = 1) is export {
     return @dists.map({ $_.generate(:$size) }).&transpose.List;
+}
+
+#------------------------------------------------------------
+
+sub chi-squared-dist($nu, UInt:D :$size = 1) is export {
+    die "The first argument is expected to be a positive number." unless $nu > 0;
+
+    my @variates = do if $nu ~~ Int:D {
+        ([+] (^$nu).map: { normal-dist(0, 1) ** 2 }) xx $size;
+    } else {
+        gamma-dist($nu / 2, 2) xx $size
+    }
+
+    return @variates.List;
 }

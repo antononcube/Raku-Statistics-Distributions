@@ -115,4 +115,14 @@ subtest {
             'list of positionals for two arugments';
 }
 
+# 19
+subtest {
+    ok random-variate(ChiSquareDistribution.new(ν => 5));
+    dies-ok { random-variate(ChiSquareDistribution.new(ν => -5)) };
+    isa-ok random-variate(ChiSquareDistribution.new(3.3)), Numeric:D,
+            'No size argument gives a number for ChiSquareDistribution';
+    is random-variate(ChiSquareDistribution.new(20), 10).all ~~ Numeric:D, True,
+            'ChiSquareDistribution gives numbers';
+}
+
 done-testing;

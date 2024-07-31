@@ -87,6 +87,19 @@ class Binormal is Generic is export {
 }
 #= Binormal distribution objects take parameters for the distribution mean and covariance matrix.
 
+#| Chi-Square distribution class
+class ChiSquare is Generic is export {
+    has Numeric:D $.nu = 1;
+    #= Degrees of freedom
+    submethod BUILD(:ν(:$!nu) = 1) {}
+    multi method new($nu) { self.bless(:$nu) }
+    multi method generate(UInt:D :$size) {
+        chi-squared-dist($!nu, :$size);
+    }
+}
+#= A Chi-Square distribution object is specified with a positive degrees of freedom parameter (nu).
+
+
 #| Discrete Uniform distribution class
 class DiscreteUniform is Generic is export {
     has Int:D $.min = 0;
