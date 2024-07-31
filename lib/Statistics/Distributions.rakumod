@@ -15,6 +15,7 @@ constant \ExponentialDistribution is export := Statistics::Distributions::Define
 constant \GammaDistribution is export := Statistics::Distributions::Defined::Gamma;
 constant \MixtureDistribution is export := Statistics::Distributions::Defined::Mixture;
 constant \NormalDistribution is export := Statistics::Distributions::Defined::Normal;
+constant \StudentTDistribution is export := Statistics::Distributions::Defined::StudentT;
 constant \ProductDistribution is export := Statistics::Distributions::Defined::Product;
 constant \UniformDistribution is export := Statistics::Distributions::Defined::Uniform;
 

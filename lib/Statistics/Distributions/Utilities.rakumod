@@ -187,7 +187,6 @@ sub product-dist(@dists, UInt:D :$size = 1) is export {
 }
 
 #------------------------------------------------------------
-
 sub chi-squared-dist($nu, UInt:D :$size = 1) is export {
     die "The first argument is expected to be a positive number." unless $nu > 0;
 
@@ -198,4 +197,16 @@ sub chi-squared-dist($nu, UInt:D :$size = 1) is export {
     }
 
     return @variates.List;
+}
+
+#------------------------------------------------------------
+sub student-t-dist($nu, $mean, $sd, Int :$size) is export {
+    my @variates;
+    for ^$size -> $ {
+        my $z = normal-dist(0, 1);
+        my $v = chi-squared-dist($nu).head;
+        my $t = $mean + $sd * ($z / sqrt($v / $nu));
+        @variates.push($t);
+    }
+    return @variates;
 }

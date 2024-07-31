@@ -125,4 +125,15 @@ subtest {
             'ChiSquareDistribution gives numbers';
 }
 
+# 20
+subtest {
+    ok random-variate(StudentTDistribution.new(ν => 5));
+    ok random-variate(StudentTDistribution.new(ν => 5, μ => 1, σ => 3));
+    dies-ok { random-variate(StudentTDistribution.new(ν => -5)) };
+    isa-ok random-variate(StudentTDistribution.new(3.3)), Numeric:D,
+            'No size argument gives a number for StudentTDistribution';
+    is random-variate(StudentTDistribution.new(20, 1, 3), 10).all ~~ Numeric:D, True,
+            'StudentTDistribution gives numbers with three arguments';
+}
+
 done-testing;

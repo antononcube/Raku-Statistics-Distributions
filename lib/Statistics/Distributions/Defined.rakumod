@@ -209,6 +209,24 @@ class Product is Generic is export {
 }
 #= Product Distribution objects are created with lists of distribution objects.
 
+#| Student t-distribution class
+class StudentT is Generic is export {
+    has Numeric:D $.nu = 1;
+    #= Degrees of freedom
+    has Numeric:D $.mean = 0;
+    #= Location
+    has Numeric:D $.sd = 1;
+    #= Scale
+    submethod BUILD(:ν(:$!nu) = 1, :µ(:$!mean) = 0, :σ(:$!sd) = 1) {}
+    multi method new($nu) { self.bless(:$nu, mean => 0, sd => 1) }
+    multi method new($nu, $mean, $sd) { self.bless(:$nu, :$mean, :$sd) }
+    multi method generate(UInt:D :$size) {
+        student-t-dist($!nu, $!mean, $!sd, :$size);
+    }
+}
+#= A Student t-distribution object is specified with a positive degrees of freedom parameter (nu), location parameter (mu), and scale parameter (sigma).
+
+
 #| Uniform distribution class
 class Uniform is Generic is export {
     has Numeric:D $.min = 0;
