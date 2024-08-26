@@ -49,7 +49,7 @@ class Binomial is Generic is export {
     #= Success probability p
 
     submethod BUILD(Numeric:D :$!n!, Numeric:D :$!p!) {
-        self.continuos = False;
+        self.continuous = False;
     }
     multi method new($n, $p) { self.bless(:$n, :$p) }
     multi method generate(UInt:D :$size) {
