@@ -17,6 +17,21 @@ class Generic is export {
     multi method generate(UInt:D :$size = 1) {!!!}
 }
 
+#| Benford distribution class
+class Benford is Generic is export {
+    has UInt:D $.b = 10;
+    #= Digit base.
+    multi method new($b) {
+        die 'The parameter is expected to be an integer greater than 2.' unless $b > 2;
+        self.bless(:$b)
+    }
+    multi method generate(UInt:D :$size) {
+        benford-dist($!b, $size).List
+    }
+}
+#= Beta distribution objects are specified with shape parameters.
+
+
 #| Beta distribution class
 class Beta is Generic is export {
     has Numeric:D $.a is required;

@@ -131,10 +131,19 @@ sub gamma-dist(Numeric:D $a, Numeric:D $b) is export {
 }
 
 #------------------------------------------------------------
+my %benford-breaks;
+sub benford-dist(UInt:D $b where $b > 2, UInt:D $size = 1) is export {
+    if %benford-breaks{$b}:!exists {
+        my @breaks = (1..($b-2)).map({ log(1 + 1 / $_, $b) });
+        %benford-breaks{$b} = ([\+] [0, |@breaks]).Array.push(1);
+    }
+    return find-interval(rand xx $size, %benford-breaks{$b}) <<+>> 1;
+}
+
+#------------------------------------------------------------
 sub beta-dist(Numeric:D $a, Numeric $b) is export {
     my $x = gamma-dist($a, 1);
     my $y = gamma-dist($b, 1);
-            ;
     return $x / ($x + $y);
 }
 

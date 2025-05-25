@@ -5,6 +5,7 @@ unit module Statistics::Distributions;
 use Statistics::Distributions::Defined;
 
 #===========================================================
+constant \BenfordDistribution is export := Statistics::Distributions::Defined::Benford;
 constant \BetaDistribution is export := Statistics::Distributions::Defined::Beta;
 constant \BernoulliDistribution is export := Statistics::Distributions::Defined::Bernoulli;
 constant \BinomialDistribution is export := Statistics::Distributions::Defined::Binomial;
@@ -31,7 +32,7 @@ multi RandomVariate($dist) {
     return RandomVariate($dist, 1)[0];
 }
 
-multi RandomVariate($dist ,
+multi RandomVariate($dist,
                     @size where { $_.all ~~ Numeric and [and]($_.map({ $_ > 0 })) and $_.elems == 2 }) {
     my @res = RandomVariate($dist, [*] @size).List;
     my @res2[@size[0];@size[1]] = @res.rotor(@size[1]);
