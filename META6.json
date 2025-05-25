@@ -1,7 +1,7 @@
 {
   "name": "Statistics::Distributions",
   "description": "Raku package for statistical distributions and related random variates generations.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "perl": "6.d",
   "authors": [
     "Anton Antonov"
@@ -20,6 +20,8 @@
   "resources": [],
   "license": "Artistic-2.0",
   "tags": [
+    "benford",
+    "benford's law",
     "bernoulli distribution",
     "bernoulli",
     "beta distribution",
