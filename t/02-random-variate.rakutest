@@ -150,10 +150,17 @@ subtest {
 
     # Expected distribution values check
     sub benford-law(UInt:D $d, UInt:D $b = 10) { log($d + 1, $b) - log($d, $b) };
-    my %digitTally = random-variate(BenfordDistribution.new, 10_000).Bag;
-    %digitTally = %digitTally.map({ $_.key => $_.value / %digitTally.values.sum });
-    my @diffs = %digitTally.map({ abs($_.value - benford-law($_.key.Int)) });
-    is (@diffs.all < 0.005), True, 'distribution check';
+
+    # In 10 differences runs at least 7 times we get expected distribution
+    my @comp = do for ^10 {
+        my %digitTally = random-variate(BenfordDistribution.new, 8_000).Bag;
+        %digitTally = %digitTally.map({ $_.key => $_.value / %digitTally.values.sum });
+        my @diffs = %digitTally.map({ abs($_.value - benford-law($_.key.Int)) });
+        @diffs.map({ $_ < 0.01 }).sum == @diffs.elems
+    }
+
+    is @comp.sum ≥ 7, True, 'distribution check';
+
 }, 'Benford disitribution';
 
 done-testing;
