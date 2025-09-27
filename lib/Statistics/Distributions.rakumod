@@ -20,6 +20,39 @@ constant \StudentTDistribution is export := Statistics::Distributions::Defined::
 constant \ProductDistribution is export := Statistics::Distributions::Defined::Product;
 constant \UniformDistribution is export := Statistics::Distributions::Defined::Uniform;
 
+
+my %distributions-base = %(
+    Benford          => Benford,
+    Beta             => Beta,
+    Bernoulli        => Bernoulli,
+    Binomial         => Binomial,
+    Binormal         => Binormal,
+    ChiSquare        => ChiSquare,
+    Chi-Square       => ChiSquare,
+    Chi_Square       => ChiSquare,
+    DiscreteUniform  => DiscreteUniform,
+    Discrete-Uniform => DiscreteUniform,
+    Discrete_Uniform => DiscreteUniform,
+    Exponential      => Exponential,
+    Gamma            => Gamma,
+    Mixture          => Mixture,
+    Normal           => Normal,
+    StudentT         => StudentT,
+    Student-T        => StudentT,
+    Student_T        => StudentT,
+    Product          => Product,
+    Uniform          => Uniform,
+);
+
+my %distributions-base-ext = %distributions-base.map({ [$_.key ~ 'Distribution' => $_.value, $_.key ~ '-Distribution' => $_.value, $_.key ~ '_Distribution' => $_.value ]}).flat;
+
+my %known-distributions = %distributions-base , %distributions-base-ext;
+%known-distributions .= map({ $_.key.lc => $_.value});
+
+sub known-distributions(-->Map:D) is export {
+    return %known-distributions.clone.Map
+}
+
 #============================================================
 # RandomVariate
 #============================================================
@@ -42,15 +75,23 @@ multi RandomVariate($dist,
 #------------------------------------------------------------
 multi RandomVariate($dist, UInt $size --> List) {
     given $dist {
-        when $dist ~~ Generic {
+        when $_ ~~ Generic:D {
             $dist.generate(:$size)
         }
+        when $_ ~~ Generic {
+            $dist.new.generate(:$size)
+        }
+        when $_ ~~ Str:D {
+            if %known-distributions{$_.lc}:exists {
+                return RandomVariate(%known-distributions{$_.lc}, $size);
+            }
+            die "Unknown random variate class name. Known variate class names are: \"{%known-distributions.keys.sort.join('", "')}\"."
+        }
         default {
-            die "Unknown random variate class."
+            die "Unknown random variate class: ⎡$_⎦."
         }
     }
 }
-
 
 #===========================================================
 #| Gives a pseudorandom variate from the distribution specification.
