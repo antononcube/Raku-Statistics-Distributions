@@ -163,4 +163,19 @@ subtest {
 
 }, 'Benford disitribution';
 
+## 22
+subtest {
+
+    isa-ok known-distributions, Map:D, 'expected type of &known-distributions';
+
+    is known-distributions.values.all ~~ Statistics::Distributions::Defined::Generic, True, 'expected type of &known-distributions values';
+
+    isa-ok random-variate('uniform', 23), List:D, 'expected type for "uniform"';
+
+    isa-ok random-variate('uniform_distribution', 23), List:D, 'expected type for "uniform_distribution"';
+
+    isa-ok random-variate('UniformDistribution', 23), List:D, 'expected type for "UniformDistribution"';
+
+}, 'known distribution names';
+
 done-testing;
