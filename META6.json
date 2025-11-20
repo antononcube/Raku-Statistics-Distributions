@@ -1,47 +1,44 @@
 {
-  "name": "Statistics::Distributions",
-  "description": "Raku package for statistical distributions and related random variates generations.",
-  "version": "0.1.6",
-  "perl": "6.d",
-  "authors": [
-    "Anton Antonov"
-  ],
-  "auth": "zef:antononcube",
-  "depends": [
-    "Math::SpecialFunctions"
-  ],
-  "build-depends": [],
-  "test-depends": [],
-  "provides": {
-    "Statistics::Distributions": "lib/Statistics/Distributions.rakumod",
-    "Statistics::Distributions::Defined": "lib/Statistics/Distributions/Defined.rakumod",
-    "Statistics::Distributions::Utilities": "lib/Statistics/Distributions/Utilities.rakumod"
-  },
-  "resources": [],
-  "license": "Artistic-2.0",
-  "tags": [
-    "benford",
-    "benford's law",
-    "bernoulli distribution",
-    "bernoulli",
-    "beta distribution",
-    "beta",
-    "binomial distribution",
-    "binomial",
-    "data generation",
-    "distributions",
-    "exponential distribution",
-    "exponential",
-    "gamma distribution",
-    "gamma",
-    "generation",
-    "number generation",
-    "random variate",
-    "statistics",
-    "stats",
-    "uniform distribution",
-    "uniform"
-  ],
-  "api": "1",
-  "source-url": "https://github.com/antononcube/Raku-Statistics-Distributions"
+    "name": "Statistics::Distributions",
+    "description": "Raku package for statistical distributions and related random variates generations.",
+    "version": "0.1.7",
+    "authors": [
+        "Anton Antonov"
+    ],
+    "auth": "zef:antononcube",
+    "depends": [
+        "Math::SpecialFunctions"
+    ],
+    "build-depends": [],
+    "provides": {
+        "Statistics::Distributions": "lib/Statistics/Distributions.rakumod",
+        "Statistics::Distributions::Defined": "lib/Statistics/Distributions/Defined.rakumod",
+        "Statistics::Distributions::Utilities": "lib/Statistics/Distributions/Utilities.rakumod"
+    },
+    "license": "Artistic-2.0",
+    "tags": [
+        "benford",
+        "benford's law",
+        "bernoulli distribution",
+        "bernoulli",
+        "beta distribution",
+        "beta",
+        "binomial distribution",
+        "binomial",
+        "data generation",
+        "distributions",
+        "exponential distribution",
+        "exponential",
+        "gamma distribution",
+        "gamma",
+        "generation",
+        "number generation",
+        "random variate",
+        "statistics",
+        "stats",
+        "uniform distribution",
+        "uniform"
+    ],
+    "api": "1",
+    "source-url": "https://github.com/antononcube/Raku-Statistics-Distributions"
 }
