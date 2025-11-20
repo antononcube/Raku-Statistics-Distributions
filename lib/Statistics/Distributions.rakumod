@@ -4,6 +4,12 @@ unit module Statistics::Distributions;
 
 use Statistics::Distributions::Defined;
 
+sub EXPORT {
+    use Statistics::Distributions::Utilities;
+    Map.new:
+            '&quantile' => &Statistics::Distributions::Utilities::quantile
+}
+
 #===========================================================
 constant \BenfordDistribution is export := Statistics::Distributions::Defined::Benford;
 constant \BetaDistribution is export := Statistics::Distributions::Defined::Beta;
