@@ -219,3 +219,54 @@ sub student-t-dist($nu, $mean, $sd, Int :$size) is export {
     }
     return @variates;
 }
+
+#------------------------------------------------------------
+proto sub quantile($data, |) is export {*}
+
+multi sub quantile(@data,
+                   :probabilities(:$probs) is copy = Whatever,
+                   :parameters(:$params) is copy = Whatever,
+                   Bool:D :p(:$pairs) = False
+                   ) {
+
+    # Check data
+    die 'The first argument is expected to be a list of numbers.'
+    unless @data.all ~~ Numeric:D;
+
+    # Handle probabilities
+    if $probs.isa(Whatever) { $probs = [1/4, 1/2, 3/4] }
+    die 'The value of $probs is expected to be a list of numbers between 0 and 1, or Whatever.'
+    unless $probs ~~ (Array:D | List:D | Seq:D ) && $probs.cache.all ~~ Numeric:D && ([&&] |$probs.cache.map(0≤*≤1));
+
+    # In order to make sure it is an array
+    my @probs = |$probs;
+
+    # Handle parameters
+    if $params.isa(Whatever) { $params = [[0, 0], [1, 0]] }
+    die 'The value of $params is expected to be a list of two lists of numbers, or Whatever.'
+    unless $params ~~ (Array:D | List:D | Seq:D ) && $params.all ~~ (Array:D | List:D | Seq:D) && $params.flat(:hammer).all ~~ Numeric:D;
+
+    my ($a, $b, $c, $d) = $params.flat(:hammer);
+
+    # Main part
+    my @sorted = @data.sort;
+    my $n = @sorted.elems;
+    my @result;
+
+    for @probs -> $p {
+        my $r = $a + ($n + $b) * $p;
+        my $lower = $r.floor;
+        my $frac  = $r - $lower;
+
+        if $lower ≥ $n {
+            @result.push( $pairs ?? ($p => @sorted.tail) !! @sorted.tail );
+        } elsif $lower ≤ 1 {
+            @result.push( $pairs ?? ($p => @sorted.head) !! @sorted.head );
+        } else {
+            my $val = @sorted[$lower - 1] + ($c + $d * $frac) * (@sorted[$lower] - @sorted[$lower - 1]);
+            @result.push( $pairs ?? ($p => $val) !! $val);
+        }
+    }
+
+    return @result;
+}
