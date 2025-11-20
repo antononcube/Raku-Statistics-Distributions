@@ -1,14 +1,14 @@
 use v6.d;
 
-unit module Statistics::Distributions;
-
-use Statistics::Distributions::Defined;
-
 sub EXPORT {
     use Statistics::Distributions::Utilities;
     Map.new:
             '&quantile' => &Statistics::Distributions::Utilities::quantile
 }
+
+unit module Statistics::Distributions;
+
+use Statistics::Distributions::Defined;
 
 #===========================================================
 constant \BenfordDistribution is export := Statistics::Distributions::Defined::Benford;

@@ -221,7 +221,16 @@ sub student-t-dist($nu, $mean, $sd, Int :$size) is export {
 }
 
 #------------------------------------------------------------
-proto sub quantile($data, |) is export {*}
+our proto sub quantile($data, |) {*}
+
+multi sub quantile(@data,
+                   $probs is copy = Whatever,
+                   $params is copy = Whatever,
+                   Bool:D :p(:$pairs) = False
+                   ) {
+    return quantile(@data, :$probs, :$params, :$pairs);
+}
+
 
 multi sub quantile(@data,
                    :probabilities(:$probs) is copy = Whatever,
