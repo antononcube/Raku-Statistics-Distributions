@@ -124,4 +124,6 @@ quantile(@values, probs => (0.2, 0.4 ... 0.8), params => [[0,1],[0,1]])
 (2021-2024),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[WRI1] Wolfram Research (2003), [Quantile](https://reference.wolfram.com/language/ref/Quantile.html), Wolfram Language function, (updated 2024).
+[WRI1] Wolfram Research, 
+[Quantile](https://reference.wolfram.com/language/ref/Quantile.html), Wolfram Language function, 
+(2003), (updated 2024).
