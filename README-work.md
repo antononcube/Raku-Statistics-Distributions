@@ -102,9 +102,26 @@ is a guide to generating random variates with the distributions of this package.
 
 ---------
 
+## Quantile calculations with different methods 
+
+The sub `quantile` provided by the package can take parameters that cover 10 different methods commonly used in
+statistics. (That is similar to [`Quantile`](https://reference.wolfram.com/language/ref/Quantile.html), [WRI1], of Wolfram Language.)
+
+For example:
+
+
+```raku
+my @values = 3.2, 1.5, 7.8, 4.1, 9.9, 2.3, 6.5, 0.8, 5.5, 8.7;
+quantile(@values, probs => (0.2, 0.4 ... 0.8), params => [[0,1],[0,1]])
+```
+
+---------
+
 ## References
 
 [AAp1] Anton Antonov
 [Data::Generators Raku package](https://github.com/antononcube/Raku-Data-Generators),
 (2021-2024),
 [GitHub/antononcube](https://github.com/antononcube).
+
+[WRI1] Wolfram Research (2003), [Quantile](https://reference.wolfram.com/language/ref/Quantile.html), Wolfram Language function, (updated 2024).
