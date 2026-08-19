@@ -82,12 +82,12 @@ sub exponential-dist(Numeric:D $lambda, Int :$size = 1) is export {
 }
 
 #------------------------------------------------------------
-sub weibull-dist(Numeric:D $shape, Numeric:D $scale, Int :$size = 1) is export {
+sub weibull-dist(Numeric:D $shape, Numeric:D $scale, Numeric:D $location = 0, Int :$size = 1) is export {
     die "The shape and scale parameters are expected to be positive numbers."
     unless $shape > 0 && $scale > 0;
 
     my @u = rand xx $size;
-    return @u.map({ $scale * (-log(1 - $_)) ** (1 / $shape) });
+    return @u.map({ $location + $scale * (-log(1 - $_)) ** (1 / $shape) });
 }
 
 #------------------------------------------------------------

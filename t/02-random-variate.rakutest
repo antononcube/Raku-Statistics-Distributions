@@ -167,13 +167,17 @@ subtest {
 subtest {
     ok random-variate(WeibullDistribution.new);
     ok random-variate(WeibullDistribution.new(:shape(2), :scale(3)));
+    ok random-variate(WeibullDistribution.new(:shape(2), :scale(3), :location(10)));
     dies-ok { random-variate(WeibullDistribution.new(:shape(-2), :scale(3))) };
-    isa-ok random-variate(WeibullDistribution.new(2, 3)), Numeric:D,
+    isa-ok random-variate(WeibullDistribution.new(2, 3, 10)), Numeric:D,
             'No size argument gives a number for WeibullDistribution';
 
     my @sample = random-variate(WeibullDistribution.new(2, 3), 100);
     is @sample.all ~~ Numeric:D, True, 'WeibullDistribution gives numbers';
     is @sample.all >= 0, True, 'WeibullDistribution gives non-negative numbers';
+
+    my @shifted-sample = random-variate(WeibullDistribution.new(2, 3, 10), 100);
+    is @shifted-sample.all >= 10, True, 'WeibullDistribution respects the location parameter';
 }, 'WeibullDistribution';
 
 ## 23

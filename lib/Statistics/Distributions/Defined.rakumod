@@ -148,13 +148,15 @@ class Weibull is Generic is export {
     #= Shape parameter
     has Numeric:D $.scale = 1;
     #= Scale parameter
-    multi method new($shape, $scale) { self.bless(:$shape, :$scale) }
+    has Numeric:D $.location = 0;
+    #= Location parameter
+    multi method new($shape, $scale, $location = 0) { self.bless(:$shape, :$scale, :$location) }
 
     multi method generate(UInt:D :$size) {
-        weibull-dist($!shape, $!scale, :$size).List
+        weibull-dist($!shape, $!scale, $!location, :$size).List
     }
 }
-#= Weibull distribution objects are specified with positive shape and scale parameters.
+#= Weibull distribution objects are specified with positive shape and scale parameters and a location parameter.
 
 #| Gamma distribution class
 class Gamma is Generic is export {
