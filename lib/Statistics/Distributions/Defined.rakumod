@@ -142,6 +142,20 @@ class Exponential is Generic is export {
 }
 #= Exponential distribution objects are specified with scale inversely proportional to the lambda parameter.
 
+#| Weibull distribution class
+class Weibull is Generic is export {
+    has Numeric:D $.shape = 1;
+    #= Shape parameter
+    has Numeric:D $.scale = 1;
+    #= Scale parameter
+    multi method new($shape, $scale) { self.bless(:$shape, :$scale) }
+
+    multi method generate(UInt:D :$size) {
+        weibull-dist($!shape, $!scale, :$size).List
+    }
+}
+#= Weibull distribution objects are specified with positive shape and scale parameters.
+
 #| Gamma distribution class
 class Gamma is Generic is export {
     has Numeric:D $.a = 0.5;

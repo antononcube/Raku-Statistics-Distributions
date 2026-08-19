@@ -12,8 +12,8 @@ use Statistics::Distributions::Defined;
 
 #===========================================================
 constant \BenfordDistribution is export := Statistics::Distributions::Defined::Benford;
-constant \BetaDistribution is export := Statistics::Distributions::Defined::Beta;
 constant \BernoulliDistribution is export := Statistics::Distributions::Defined::Bernoulli;
+constant \BetaDistribution is export := Statistics::Distributions::Defined::Beta;
 constant \BinomialDistribution is export := Statistics::Distributions::Defined::Binomial;
 constant \BinormalDistribution is export := Statistics::Distributions::Defined::Binormal;
 constant \ChiSquareDistribution is export := Statistics::Distributions::Defined::ChiSquare;
@@ -22,33 +22,35 @@ constant \ExponentialDistribution is export := Statistics::Distributions::Define
 constant \GammaDistribution is export := Statistics::Distributions::Defined::Gamma;
 constant \MixtureDistribution is export := Statistics::Distributions::Defined::Mixture;
 constant \NormalDistribution is export := Statistics::Distributions::Defined::Normal;
-constant \StudentTDistribution is export := Statistics::Distributions::Defined::StudentT;
 constant \ProductDistribution is export := Statistics::Distributions::Defined::Product;
+constant \StudentTDistribution is export := Statistics::Distributions::Defined::StudentT;
 constant \UniformDistribution is export := Statistics::Distributions::Defined::Uniform;
+constant \WeibullDistribution is export := Statistics::Distributions::Defined::Weibull;
 
 
-my %distributions-base = %(
+my %distributions-base =
     Benford          => Benford,
-    Beta             => Beta,
     Bernoulli        => Bernoulli,
+    Beta             => Beta,
     Binomial         => Binomial,
     Binormal         => Binormal,
-    ChiSquare        => ChiSquare,
     Chi-Square       => ChiSquare,
+    ChiSquare        => ChiSquare,
     Chi_Square       => ChiSquare,
-    DiscreteUniform  => DiscreteUniform,
     Discrete-Uniform => DiscreteUniform,
+    DiscreteUniform  => DiscreteUniform,
     Discrete_Uniform => DiscreteUniform,
     Exponential      => Exponential,
     Gamma            => Gamma,
     Mixture          => Mixture,
     Normal           => Normal,
-    StudentT         => StudentT,
-    Student-T        => StudentT,
-    Student_T        => StudentT,
     Product          => Product,
+    Student-T        => StudentT,
+    StudentT         => StudentT,
+    Student_T        => StudentT,
     Uniform          => Uniform,
-);
+    Weibull          => Weibull,
+;
 
 my %distributions-base-ext = %distributions-base.map({ [$_.key ~ 'Distribution' => $_.value, $_.key ~ '-Distribution' => $_.value, $_.key ~ '_Distribution' => $_.value ]}).flat;
 

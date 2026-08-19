@@ -82,6 +82,15 @@ sub exponential-dist(Numeric:D $lambda, Int :$size = 1) is export {
 }
 
 #------------------------------------------------------------
+sub weibull-dist(Numeric:D $shape, Numeric:D $scale, Int :$size = 1) is export {
+    die "The shape and scale parameters are expected to be positive numbers."
+    unless $shape > 0 && $scale > 0;
+
+    my @u = rand xx $size;
+    return @u.map({ $scale * (-log(1 - $_)) ** (1 / $shape) });
+}
+
+#------------------------------------------------------------
 # Using:
 # George Marsaglia and Wai Wan Tsang. 2000. "A simple method for generating gamma variables."
 # ACM Trans. Math. Softw. 26, 3 (Sept. 2000), 363–372.
