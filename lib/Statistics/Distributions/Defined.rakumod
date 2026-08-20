@@ -142,6 +142,98 @@ class Exponential is Generic is export {
 }
 #= Exponential distribution objects are specified with scale inversely proportional to the lambda parameter.
 
+#| Extreme Value distribution class
+class ExtremeValue is Generic is export {
+    has Numeric:D $.location = 0;
+    #= Location parameter
+    has Numeric:D $.scale = 1;
+    #= Scale parameter
+    multi method new($location, $scale) { self.bless(:$location, :$scale) }
+
+    multi method generate(UInt:D :$size) {
+        extreme-value-dist($!location, $!scale, :$size).List
+    }
+}
+#= Extreme Value distribution objects are specified with location and positive scale parameters.
+
+#| Frechet distribution class
+class Frechet is Generic is export {
+    has Numeric:D $.a = 1;
+    #= Shape parameter
+    has Numeric:D $.b = 1;
+    #= Scale parameter
+    has Numeric:D $.m = 0;
+    #= Location parameter
+    multi method new($a, $b, $m = 0) { self.bless(:$a, :$b, :$m) }
+
+    multi method generate(UInt:D :$size) {
+        frechet-dist($!a, $!b, $!m, :$size).List
+    }
+}
+#= Frechet distribution objects are specified with positive shape and scale parameters and a location parameter.
+
+#| Gumbel distribution class
+class Gumbel is Generic is export {
+    has Numeric:D $.location = 0;
+    #= Location parameter
+    has Numeric:D $.scale = 1;
+    #= Scale parameter
+    submethod BUILD(:a(:loc(:$!location)) = 0, :b(:$!scale) = 1) {}
+    multi method new($location, $scale) { self.bless(:$location, :$scale) }
+
+    multi method generate(UInt:D :$size) {
+        gumbel-dist($!location, $!scale, :$size).List
+    }
+}
+#= Gumbel distribution objects are specified with location and positive scale parameters.
+
+#| Min Stable distribution class
+class MinStable is Generic is export {
+    has Numeric:D $.mu = 0;
+    #= Location parameter
+    has Numeric:D $.sigma = 1;
+    #= Scale parameter
+    has Numeric:D $.xi = 0;
+    #= Shape parameter
+    submethod BUILD(:μ(:$!mu) = 0, :σ(:$!sigma) = 1, :ξ(:$!xi) = 0) {}
+    multi method new($mu, $sigma, $xi) { self.bless(:$mu, :$sigma, :$xi) }
+
+    multi method generate(UInt:D :$size) {
+        min-stable-dist($!mu, $!sigma, $!xi, :$size).List
+    }
+}
+#= Min Stable distribution objects are specified with location, positive scale, and shape parameters.
+
+#| Max Stable distribution class
+class MaxStable is Generic is export {
+    has Numeric:D $.mu = 0;
+    #= Location parameter
+    has Numeric:D $.sigma = 1;
+    #= Scale parameter
+    has Numeric:D $.xi = 0;
+    #= Shape parameter
+    submethod BUILD(:μ(:$!mu) = 0, :σ(:$!sigma) = 1, :ξ(:$!xi) = 0) {}
+    multi method new($mu, $sigma, $xi) { self.bless(:$mu, :$sigma, :$xi) }
+
+    multi method generate(UInt:D :$size) {
+        max-stable-dist($!mu, $!sigma, $!xi, :$size).List
+    }
+}
+#= Max Stable distribution objects are specified with location, positive scale, and shape parameters.
+
+#| Rayleigh distribution class
+class Rayleigh is Generic is export {
+    has Numeric:D $.sigma = 1;
+    #= Scale parameter
+    submethod BUILD(:σ(:$!sigma) = 1) {}
+    multi method new($sigma) { self.bless(:$sigma) }
+
+    multi method generate(UInt:D :$size) {
+        rayleigh-dist($!sigma, :$size).List
+    }
+}
+#= Rayleigh distribution objects are specified with a positive scale parameter.
+
 #| Weibull distribution class
 class Weibull is Generic is export {
     has Numeric:D $.shape = 1;
@@ -150,6 +242,7 @@ class Weibull is Generic is export {
     #= Scale parameter
     has Numeric:D $.location = 0;
     #= Location parameter
+    submethod BUILD(:a(:$!shape) = 1, :b(:$!scale) = 1, :μ(:$!location) = 0) {}
     multi method new($shape, $scale, $location = 0) { self.bless(:$shape, :$scale, :$location) }
 
     multi method generate(UInt:D :$size) {

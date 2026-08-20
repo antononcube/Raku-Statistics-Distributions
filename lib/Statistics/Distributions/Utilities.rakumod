@@ -91,6 +91,66 @@ sub weibull-dist(Numeric:D $shape, Numeric:D $scale, Numeric:D $location = 0, In
 }
 
 #------------------------------------------------------------
+sub extreme-value-dist(Numeric:D $location, Numeric:D $scale, Int :$size = 1) is export {
+    die "The scale parameter is expected to be a positive number."
+    unless $scale > 0;
+
+    my @u = rand xx $size;
+    return @u.map({ $location - $scale * log(-log($_)) });
+}
+
+#------------------------------------------------------------
+sub frechet-dist(Numeric:D $a, Numeric:D $b, Numeric:D $m = 0, Int :$size = 1) is export {
+    die "The shape and scale parameters are expected to be positive numbers."
+    unless $a > 0 && $b > 0;
+
+    my @u = rand xx $size;
+    return @u.map({ $m + $b / (-log($_)) ** (1 / $a) });
+}
+
+#------------------------------------------------------------
+sub gumbel-dist(Numeric:D $a, Numeric:D $b, Int :$size = 1) is export {
+    extreme-value-dist($a, $b, :$size)
+}
+
+#------------------------------------------------------------
+sub min-stable-dist(Numeric:D $mu, Numeric:D $sigma, Numeric:D $xi, Int :$size = 1) is export {
+    die "The scale parameter is expected to be a positive number."
+    unless $sigma > 0;
+
+    my @u = rand xx $size;
+    return @u.map(-> $u {
+        my $z = $xi == 0
+                ?? log(-log(1 - $u))
+                !! (1 - (-log(1 - $u)) ** $xi) / $xi;
+        $mu + $sigma * $z
+    });
+}
+
+#------------------------------------------------------------
+sub max-stable-dist(Numeric:D $mu, Numeric:D $sigma, Numeric:D $xi, Int :$size = 1) is export {
+    die "The scale parameter is expected to be a positive number."
+    unless $sigma > 0;
+
+    my @u = rand xx $size;
+    return @u.map(-> $u {
+        my $z = $xi == 0
+                ?? -log(-log($u))
+                !! ((-log($u)) ** (-$xi) - 1) / $xi;
+        $mu + $sigma * $z
+    });
+}
+
+#------------------------------------------------------------
+sub rayleigh-dist(Numeric:D $sigma, Int :$size = 1) is export {
+    die "The scale parameter is expected to be a positive number."
+    unless $sigma > 0;
+
+    my @u = rand xx $size;
+    return @u.map({ $sigma * sqrt(-2 * log(1 - $_)) });
+}
+
+#------------------------------------------------------------
 # Using:
 # George Marsaglia and Wai Wan Tsang. 2000. "A simple method for generating gamma variables."
 # ACM Trans. Math. Softw. 26, 3 (Sept. 2000), 363–372.
