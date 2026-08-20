@@ -98,6 +98,7 @@ say random-variate(NormalDistribution.new, [3,4]);
 
 **Remark:** The Markdown document 
 ["Random-variate-generation-examples.md"](https://github.com/antononcube/Raku-Statistics-Distributions/blob/main/docs/Random-variate-generation-examples.md),
+([notebook](https://github.com/antononcube/Raku-Statistics-Distributions/blob/main/docs/Random-variate-generation-examples.ipynb)),
 is a guide to generating random variates with the distributions of this package.
 
 ---------
