@@ -5,45 +5,61 @@
 This document is a concise guide for generating random variates with the probability distributions
 of the Raku package ["Statistics::Distributions"](https://raku.land/zef:antononcube/Statistics::Distributions), [AAp1].    
 
----------
+---
 
 ## Setup
 
 ```raku
 use Statistics::Distributions;
 use Data::Summarizers;
+use Data::Translators;
 use Text::Plot;
 ```
 
---------
+---
 
-## Univariate Distributions
+## Univariate discrete distributions
 
-### Beta Distribution
+### Benford Distribution
 
-[Beta distribution](https://en.wikipedia.org/wiki/Beta_distribution) is a continuous probability distribution that is defined by two parameters, alpha and beta. The beta distribution is often used to model proportions.
+[Benford's law](https://en.wikipedia.org/wiki/Benford%27s_law), also known as the Newcomb–Benford law, the law of anomalous numbers, or the first-digit law, is an observation that in many real-life sets of numerical data, the ***leading digit*** is likely to be small. Here the Benoford Distribution is computed for a given number base:
 
 ```raku
-my $beta = BetaDistribution.new(4, 4);
-my @res = random-variate($beta, 200);
+my $benford = BenfordDistribution.new(12);
+my @res = random-variate($benford, 2_000);
 
-records-summary(@res);
+@res.Bag.Hash
 ```
 
-```perl6
-text-histogram(@res, title => 'Beta Distribution')
+```raku
+text-histogram(@res, :60width, :16height, title => 'Benford Distribution')
 ```
 
+
+### Binomial Distribution
+
+[Binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution) models the number of successes in a fixed number of independent trials with the same success probability.
+
+```raku
+my $binomial = BinomialDistribution.new(12, 0.35);
+my @res = random-variate($binomial, 200);
+
+sink records-summary(@res);
+```
+
+```raku
+text-list-plot(@res.&tally.kv.rotor(2), title => 'Binomial Distribution tallies')
+```
 
 ### Bernoulli Distribution
 
 [Bernoulli distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution) is a discrete probability distribution that takes the value 1 with probability p and the value 0 with probability 1-p.
 
 ```raku
-my $bernoulli = BernoulliDistribution.new(:p(0.5));
+my $bernoulli = BernoulliDistribution.new(0.5);
 my @res = random-variate($bernoulli, 12);
 
-records-summary(@res);
+sink records-summary(@res);
 ```
 
 ### Discrete Uniform Distribution
@@ -51,47 +67,81 @@ records-summary(@res);
 [Discrete uniform distribution](https://en.wikipedia.org/wiki/Discrete_uniform_distribution) is a discrete probability distribution that takes on a finite number of values with equal probability.
 
 ```raku
-my $discrete_uniform = DiscreteUniformDistribution.new(:min(10), :max(20));
+my $discrete_uniform = DiscreteUniformDistribution.new(10, 20);
 my @res = random-variate($discrete_uniform, 200);
 
-records-summary(@res);
+sink records-summary(@res);
 ```
 
-```perl6
+```raku
 text-list-plot(@res.&tally.kv.rotor(2), title => 'Discrete Uniform Distribution tallies')
+```
+
+---
+
+## Univariate continuous distributions
+
+### Beta Distribution
+
+```raku
+my $beta = BetaDistribution.new(4, 4);
+my @res = random-variate($beta, 200);
+
+sink records-summary(@res);
+```
+
+```raku
+text-histogram(@res, title => 'Beta Distribution')
 ```
 
 ### Normal Distribution
 
-[Normal distribution](https://en.wikipedia.org/wiki/Normal_distribution) is a continuous probability distribution that is defined by two parameters, the mean and the standard deviation. The normal distribution is also known as the Gaussian distribution.
+[Normal distribution](https://en.wikipedia.org/wiki/Normal_distribution) is a continuous probability distribution specified here by its mean and standard deviation.
 
 ```raku
-my $normal = NormalDistribution.new(:mean(10), :sd(2));
+my $normal = NormalDistribution.new(10, 2);
 my @res = random-variate($normal, 200);
 
-records-summary(@res);
+sink records-summary(@res);
 ```
 
-```perl6
+```raku
 text-histogram(@res, title => 'Normal Distribution')
 ```
 
-### Uniform Distribution
 
-[Uniform distribution](https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)) is a continuous probability distribution that is defined by two parameters, the minimum and the maximum. The uniform distribution is also known as the rectangular distribution.
+### Uniform distribution
 
 ```raku
-my $uniform = UniformDistribution.new(:min(-10), :max(5));
-my @res = random-variate($uniform, 200);
-
-records-summary(@res);
+my @res = random-variate(UniformDistribution.new(-10, 5), 1_000);
+sink records-summary(@res);
 ```
 
-```perl6
+```raku
 text-histogram(@res, title => 'Uniform Distribution')
 ```
 
-----
+### Additional univariate continuous distributions
+
+```raku
+my @continuous-examples =
+    ChiSquareDistribution.new(4),
+    ExponentialDistribution.new(1.5),
+    ExtremeValueDistribution.new(0, 1),
+    FrechetDistribution.new(2, 1),
+    GammaDistribution.new(2, 1),
+    GumbelDistribution.new(0, 1),
+    MaxStableDistribution.new(0, 1, 0.2),
+    MinStableDistribution.new(0, 1, 0.2),
+    RayleighDistribution.new(1),
+    StudentTDistribution.new(5, 0, 1),
+    WeibullDistribution.new(5, 2)
+;
+
+.say for @continuous-examples
+```
+
+---
 
 ## Multivariate Distributions
 
@@ -102,16 +152,16 @@ and covariance matrix `[[σ1 ** 2, ρ * σ1 * σ2], [ρ * σ1 * σ2, σ2 **2]]`.
 
 ```raku
 my $binormal = BinormalDistribution.new([10, 4], [4, 2], 0.5);
-my @res = random-variate($binormal, 40);
+my @res = random-variate($binormal, 400);
 
-records-summary(@res, field-names => ['0', '1']);
+sink records-summary(@res, field-names => ['0', '1']);
 ```
 
-```perl6
+```raku
 text-list-plot(@res, width => 60, height => 20, title => 'Binormal Distribution random variates')
 ```
 
------
+---
 
 ## Derived Distributions
 
@@ -123,10 +173,10 @@ text-list-plot(@res, width => 60, height => 20, title => 'Binormal Distribution 
 my $mixture = MixtureDistribution.new([2, 5], [NormalDistribution.new(3, 4), NormalDistribution.new(16, 5)]);
 my @res = random-variate($mixture, 300);
 
-records-summary(@res);
+sink records-summary(@res);
 ```
 
-```perl6
+```raku
 text-histogram(@res, title => 'Mixture Distribution', width => 80)
 ```
 
@@ -136,16 +186,16 @@ text-histogram(@res, title => 'Mixture Distribution', width => 80)
 
 ```raku
 my $product = ProductDistribution.new([NormalDistribution.new(3, 4), NormalDistribution.new(6, 5)]);
-my @res = random-variate($product, 60);
+my @res = random-variate($product, 600);
 
-records-summary(@res, field-names => ['0', '1']);
+sink records-summary(@res, field-names => ['0', '1']);
 ```
 
-```perl6
+```raku
 text-list-plot(@res, width => 60, height => 20, title => "Product Distribution random variates")
 ```
 
---------
+---
 
 ## References
 
