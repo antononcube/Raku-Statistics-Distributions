@@ -11,6 +11,13 @@ class Generic is export {
     # but that is the easiest way to initialize them correctly.
     has Bool:D $.continuous is rw = True;
     has Bool:D $.derived is rw = False;
+    multi method Hash(::?CLASS:D: --> Hash) {
+        { class => self.^name.split('::').tail, dimension => $!dimension, continuous => $!continuous, derived => $!derived }
+    }
+    multi method gist(::?CLASS:D:-->Str) {
+        my %h = self.Hash;
+        %h<class> ~ %h.grep(*.key ne 'class').List.raku
+    }
     multi method generate(UInt:D $size = 1) {
         self.generate(:$size)
     }
@@ -25,6 +32,7 @@ class Benford is Generic is export {
         die 'The parameter is expected to be an integer greater than 2.' unless $b > 2;
         self.bless(:$b)
     }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, b => $!b } }
     multi method generate(UInt:D :$size) {
         benford-dist($!b, $size).List
     }
@@ -39,6 +47,7 @@ class Beta is Generic is export {
     has Numeric:D $.b is required;
     #= Shape parameter right.
     multi method new($a, $b) { self.bless(:$a, :$b) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, a => $!a, b => $!b } }
     multi method generate(UInt:D :$size) {
         (beta-dist($!a, $!b) xx $size).List
     }
@@ -50,6 +59,7 @@ class Bernoulli is Generic is export {
     has Numeric:D $.p = 0.5;
     #= Get value 1 with probability p
     multi method new($p) { self.bless(:$p) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, p => $!p } }
     multi method generate(UInt:D :$size) {
         (rand xx $size).map({ $_ ≤ $!p ?? 1 !! 0 }).List
     }
@@ -67,6 +77,7 @@ class Binomial is Generic is export {
         self.continuous = False;
     }
     multi method new($n, $p) { self.bless(:$n, :$p) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, n => $!n, p => $!p } }
     multi method generate(UInt:D :$size) {
         binomial-dist($!n, $!p, :$size).List
     }
@@ -96,6 +107,10 @@ class Binormal is Generic is export {
         self.bless(:$mu1, :$mu2, :$sigma1, :$sigma2, :$rho)
     }
 
+    multi method Hash(::?CLASS:D: --> Hash) {
+        { class => self.^name.split('::').tail, mu1 => $!mu1, mu2 => $!mu2, sigma1 => $!sigma1, sigma2 => $!sigma2, rho => $!rho }
+    }
+
     multi method generate(UInt:D :$size) {
         (binormal-dist([$!mu1, $!mu2], [$!sigma1, $!sigma2], $!rho) xx $size).List
     }
@@ -108,6 +123,7 @@ class ChiSquare is Generic is export {
     #= Degrees of freedom
     submethod BUILD(:ν(:$!nu) = 1) {}
     multi method new($nu) { self.bless(:$nu) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, nu => $!nu } }
     multi method generate(UInt:D :$size) {
         chi-squared-dist($!nu, :$size);
     }
@@ -124,6 +140,7 @@ class DiscreteUniform is Generic is export {
 
     submethod TWEAK() { self.continuous = False; }
     multi method new($min, $max) { self.bless(:$min, :$max) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, min => $!min, max => $!max } }
     multi method generate(UInt:D :$size) {
         ($!min .. $!max).roll($size).List
     }
@@ -135,6 +152,7 @@ class Exponential is Generic is export {
     has Numeric:D $.lambda = 0.5;
     #= Scale parameter
     multi method new($lambda) { self.bless(:$lambda) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, lambda => $!lambda } }
 
     multi method generate(UInt:D :$size) {
         exponential-dist($!lambda, :$size).List
@@ -149,6 +167,7 @@ class ExtremeValue is Generic is export {
     has Numeric:D $.scale = 1;
     #= Scale parameter
     multi method new($location, $scale) { self.bless(:$location, :$scale) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, location => $!location, scale => $!scale } }
 
     multi method generate(UInt:D :$size) {
         extreme-value-dist($!location, $!scale, :$size).List
@@ -165,6 +184,7 @@ class Frechet is Generic is export {
     has Numeric:D $.m = 0;
     #= Location parameter
     multi method new($a, $b, $m = 0) { self.bless(:$a, :$b, :$m) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, a => $!a, b => $!b, m => $!m } }
 
     multi method generate(UInt:D :$size) {
         frechet-dist($!a, $!b, $!m, :$size).List
@@ -180,6 +200,7 @@ class Gumbel is Generic is export {
     #= Scale parameter
     submethod BUILD(:a(:loc(:$!location)) = 0, :b(:$!scale) = 1) {}
     multi method new($location, $scale) { self.bless(:$location, :$scale) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, location => $!location, scale => $!scale } }
 
     multi method generate(UInt:D :$size) {
         gumbel-dist($!location, $!scale, :$size).List
@@ -197,6 +218,7 @@ class MinStable is Generic is export {
     #= Shape parameter
     submethod BUILD(:μ(:$!mu) = 0, :σ(:$!sigma) = 1, :ξ(:$!xi) = 0) {}
     multi method new($mu, $sigma, $xi) { self.bless(:$mu, :$sigma, :$xi) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, mu => $!mu, sigma => $!sigma, xi => $!xi } }
 
     multi method generate(UInt:D :$size) {
         min-stable-dist($!mu, $!sigma, $!xi, :$size).List
@@ -214,6 +236,7 @@ class MaxStable is Generic is export {
     #= Shape parameter
     submethod BUILD(:μ(:$!mu) = 0, :σ(:$!sigma) = 1, :ξ(:$!xi) = 0) {}
     multi method new($mu, $sigma, $xi) { self.bless(:$mu, :$sigma, :$xi) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, mu => $!mu, sigma => $!sigma, xi => $!xi } }
 
     multi method generate(UInt:D :$size) {
         max-stable-dist($!mu, $!sigma, $!xi, :$size).List
@@ -227,6 +250,7 @@ class Rayleigh is Generic is export {
     #= Scale parameter
     submethod BUILD(:σ(:$!sigma) = 1) {}
     multi method new($sigma) { self.bless(:$sigma) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, sigma => $!sigma } }
 
     multi method generate(UInt:D :$size) {
         rayleigh-dist($!sigma, :$size).List
@@ -244,6 +268,7 @@ class Weibull is Generic is export {
     #= Location parameter
     submethod BUILD(:a(:$!shape) = 1, :b(:$!scale) = 1, :μ(:$!location) = 0) {}
     multi method new($shape, $scale, $location = 0) { self.bless(:$shape, :$scale, :$location) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, shape => $!shape, scale => $!scale, location => $!location } }
 
     multi method generate(UInt:D :$size) {
         weibull-dist($!shape, $!scale, $!location, :$size).List
@@ -256,6 +281,7 @@ class Gamma is Generic is export {
     has Numeric:D $.a = 0.5;
     has Numeric:D $.b = 0.5;
     multi method new($a, $b) { self.bless(:$a, :$b) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, a => $!a, b => $!b } }
 
     multi method generate(UInt:D :$size) {
         (gamma-dist($!a, $!b) xx $size).List
@@ -288,6 +314,8 @@ class Mixture is Generic is export {
         self.bless(:@weights, :@distributions)
     }
 
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, weights => @!weights, distributions => @!distributions } }
+
     multi method generate(UInt:D :$size) {
         mixture-dist(@!weights, @!distributions, :$size)
     }
@@ -302,6 +330,7 @@ class Normal is Generic is export {
     #= Standard Deviation of the Normal distribution
     submethod BUILD(:µ(:$!mean) = 0, :σ(:$!sd) = 1) {}
     multi method new($mean, $sd) { self.bless(:$mean, :$sd) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, mean => $!mean, sd => $!sd } }
 
     multi method generate(UInt:D :$size) {
         (normal-dist($!mean, $!sd) xx $size).List
@@ -327,6 +356,8 @@ class Product is Generic is export {
         self.bless(:@distributions)
     }
 
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, distributions => @!distributions } }
+
     multi method generate(UInt:D :$size) {
         product-dist(@!distributions, :$size)
     }
@@ -344,6 +375,7 @@ class StudentT is Generic is export {
     submethod BUILD(:ν(:$!nu) = 1, :µ(:$!mean) = 0, :σ(:$!sd) = 1) {}
     multi method new($nu) { self.bless(:$nu, mean => 0, sd => 1) }
     multi method new($nu, $mean, $sd) { self.bless(:$nu, :$mean, :$sd) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, nu => $!nu, mean => $!mean, sd => $!sd } }
     multi method generate(UInt:D :$size) {
         student-t-dist($!nu, $!mean, $!sd, :$size);
     }
@@ -358,6 +390,7 @@ class Uniform is Generic is export {
     has Numeric:D $.max = 1;
     #= Max boundary of the Uniform distribution
     multi method new($min, $max) { self.bless(:$min, :$max) }
+    multi method Hash(::?CLASS:D: --> Hash) { { class => self.^name.split('::').tail, min => $!min, max => $!max } }
 
     multi method generate(UInt:D :$size) {
         (($!min .. $!max).rand xx $size).List
