@@ -2,37 +2,37 @@ use v6.d;
 
 sub EXPORT {
     use Statistics::Distributions::Utilities;
+    use Statistics::Distributions::Defined;
+
     Map.new:
-            '&quantile' => &Statistics::Distributions::Utilities::quantile
+            '&quantile' => &Statistics::Distributions::Utilities::quantile,
+            'BenfordDistribution' => Statistics::Distributions::Defined::Benford,
+            'BernoulliDistribution' => Statistics::Distributions::Defined::Bernoulli,
+            'BetaDistribution' => Statistics::Distributions::Defined::Beta,
+            'BinomialDistribution' => Statistics::Distributions::Defined::Binomial,
+            'BinormalDistribution' => Statistics::Distributions::Defined::Binormal,
+            'ChiSquareDistribution' => Statistics::Distributions::Defined::ChiSquare,
+            'DiscreteUniformDistribution' => Statistics::Distributions::Defined::DiscreteUniform,
+            'ExponentialDistribution' => Statistics::Distributions::Defined::Exponential,
+            'ExtremeValueDistribution' => Statistics::Distributions::Defined::ExtremeValue,
+            'FrechetDistribution' => Statistics::Distributions::Defined::Frechet,
+            'GammaDistribution' => Statistics::Distributions::Defined::Gamma,
+            'GumbelDistribution' => Statistics::Distributions::Defined::Gumbel,
+            'MaxStableDistribution' => Statistics::Distributions::Defined::MaxStable,
+            'MixtureDistribution' => Statistics::Distributions::Defined::Mixture,
+            'MinStableDistribution' => Statistics::Distributions::Defined::MinStable,
+            'NormalDistribution' => Statistics::Distributions::Defined::Normal,
+            'ProductDistribution' => Statistics::Distributions::Defined::Product,
+            'RayleighDistribution' => Statistics::Distributions::Defined::Rayleigh,
+            'StudentTDistribution' => Statistics::Distributions::Defined::StudentT,
+            'UniformDistribution' => Statistics::Distributions::Defined::Uniform,
+            'WeibullDistribution' => Statistics::Distributions::Defined::Weibull
+            ;
 }
 
 unit module Statistics::Distributions;
 
 use Statistics::Distributions::Defined;
-
-#===========================================================
-constant \BenfordDistribution is export := Statistics::Distributions::Defined::Benford;
-constant \BernoulliDistribution is export := Statistics::Distributions::Defined::Bernoulli;
-constant \BetaDistribution is export := Statistics::Distributions::Defined::Beta;
-constant \BinomialDistribution is export := Statistics::Distributions::Defined::Binomial;
-constant \BinormalDistribution is export := Statistics::Distributions::Defined::Binormal;
-constant \ChiSquareDistribution is export := Statistics::Distributions::Defined::ChiSquare;
-constant \DiscreteUniformDistribution is export := Statistics::Distributions::Defined::DiscreteUniform;
-constant \ExponentialDistribution is export := Statistics::Distributions::Defined::Exponential;
-constant \ExtremeValueDistribution is export := Statistics::Distributions::Defined::ExtremeValue;
-constant \FrechetDistribution is export := Statistics::Distributions::Defined::Frechet;
-constant \GammaDistribution is export := Statistics::Distributions::Defined::Gamma;
-constant \GumbelDistribution is export := Statistics::Distributions::Defined::Gumbel;
-constant \MaxStableDistribution is export := Statistics::Distributions::Defined::MaxStable;
-constant \MixtureDistribution is export := Statistics::Distributions::Defined::Mixture;
-constant \MinStableDistribution is export := Statistics::Distributions::Defined::MinStable;
-constant \NormalDistribution is export := Statistics::Distributions::Defined::Normal;
-constant \ProductDistribution is export := Statistics::Distributions::Defined::Product;
-constant \RayleighDistribution is export := Statistics::Distributions::Defined::Rayleigh;
-constant \StudentTDistribution is export := Statistics::Distributions::Defined::StudentT;
-constant \UniformDistribution is export := Statistics::Distributions::Defined::Uniform;
-constant \WeibullDistribution is export := Statistics::Distributions::Defined::Weibull;
-
 
 my %distributions-base =
     Benford          => Benford,
@@ -148,11 +148,11 @@ multi sub random-real((Numeric $min, Numeric $max)) {
 }
 
 multi sub random-real((Numeric $min, Numeric $max), UInt $size) {
-    return RandomVariate(UniformDistribution.new(:$min, :$max), $size);
+    return RandomVariate(Statistics::Distributions::Defined::Uniform.new(:$min, :$max), $size);
 }
 
 multi sub random-real((Numeric $min, Numeric $max), @size) {
-    return RandomVariate(UniformDistribution.new(:$min, :$max), @size);
+    return RandomVariate(Statistics::Distributions::Defined::Uniform.new(:$min, :$max), @size);
 }
 
 multi sub random-real(Numeric :$min = 0, Numeric :$max = 1) {
