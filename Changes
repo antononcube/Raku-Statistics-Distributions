@@ -1,0 +1,8 @@
+Changes of the Raku package "Statistics::Distributions".
+
+2026-08-20 0.1.8
+    - Implemented reliability distributions:
+        - Frechet, Gumbel, MinStable, MaxStable, Rayleigh, Weibull
+    - Refactored the distribution classes to have special gists and hashmap representations.
+    - Better exporting of distribution classes symbols.
+    - Extended the documentation to have examples of package's all 21 distributions.
