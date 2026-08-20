@@ -182,6 +182,32 @@ subtest {
 
 ## 23
 subtest {
+    my @extreme-value = random-variate(ExtremeValueDistribution.new(10, 3), 100);
+    is @extreme-value.all ~~ Numeric:D, True, 'ExtremeValueDistribution gives numbers';
+    dies-ok { random-variate(ExtremeValueDistribution.new(0, -1)) };
+
+    my @frechet = random-variate(FrechetDistribution.new(2, 3, 10), 100);
+    is @frechet.all > 10, True, 'FrechetDistribution respects the location parameter';
+    dies-ok { random-variate(FrechetDistribution.new(-2, 3)) };
+
+    is random-variate(GumbelDistribution.new(10, 3), 100).all ~~ Numeric:D, True,
+            'GumbelDistribution gives numbers';
+    dies-ok { random-variate(GumbelDistribution.new(0, -1)) };
+
+    is random-variate(MinStableDistribution.new(10, 3, 0.2), 100).all ~~ Numeric:D, True,
+            'MinStableDistribution gives numbers';
+    is random-variate(MaxStableDistribution.new(μ => 10, σ => 3, ξ => -0.2), 100).all ~~ Numeric:D, True,
+            'MaxStableDistribution gives numbers with Greek named parameters';
+    dies-ok { random-variate(MinStableDistribution.new(0, -1, 0)) };
+    dies-ok { random-variate(MaxStableDistribution.new(0, -1, 0)) };
+
+    my @rayleigh = random-variate(RayleighDistribution.new(3), 100);
+    is @rayleigh.all >= 0, True, 'RayleighDistribution gives non-negative numbers';
+    dies-ok { random-variate(RayleighDistribution.new(-1)) };
+}, 'Extreme value distributions';
+
+## 24
+subtest {
 
     isa-ok known-distributions, Map:D, 'expected type of &known-distributions';
 
@@ -194,6 +220,8 @@ subtest {
     isa-ok random-variate('UniformDistribution', 23), List:D, 'expected type for "UniformDistribution"';
 
     isa-ok random-variate('weibull_distribution', 23), List:D, 'expected type for "weibull_distribution"';
+
+    isa-ok random-variate('max_stable_distribution', 23), List:D, 'expected type for "max_stable_distribution"';
 
 }, 'known distribution names';
 
